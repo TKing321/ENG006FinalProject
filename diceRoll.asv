@@ -1,4 +1,4 @@
-classdef diceroll
+classdef diceRoll
     methods(Static)
         function obj = diceroll()
         end

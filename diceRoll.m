@@ -1,6 +1,6 @@
-classdef diceroll
+classdef diceRoll
     methods(Static)
-        function obj = diceroll()
+        function obj = diceRoll()
         end
         
         function obj = newNumbers()
