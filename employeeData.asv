@@ -1,9 +1,0 @@
-classdef employeeData
-    methods
-        function obj = employeeData()
-        end
-        
-        function obj = newNumbers()
-            obj.dice=randi(
-    end
-end

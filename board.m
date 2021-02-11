@@ -25,14 +25,12 @@ classdef board
                 otherwise
                     error("You have encounter an unexpected error, please contact the Author with the code 'Color Position'");
             end
-            obj
         end
     end
     methods
         function value = total(obj,color)
             switch color
                 case "red"
-                    disp(obj.red);
                     value=sum(obj.red);
                 case "yellow"
                     value=sum(obj.yellow);
