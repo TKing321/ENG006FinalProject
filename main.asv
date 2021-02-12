@@ -1,5 +1,4 @@
 classdef main
-    
     properties (Constant)
         writeKeyTurn = 'NGW99VVOQPSVSISN';
         readKeyTurn = '5RYFWLGNF8I4GSQU';
@@ -15,7 +14,6 @@ classdef main
     end
     
     methods 
-        
         function obj = main()
         end
         

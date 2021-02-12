@@ -25,6 +25,7 @@ classdef board
                 otherwise
                     error("You have encounter an unexpected error, please contact the Author with the code 'Color Position'");
             end
+            obj
         end
     end
     methods
