@@ -37,9 +37,6 @@ classdef game
             colorMoves=colorMoves-1;
             whiteMoves=whiteMoves-1;
             
-            disp(colorMoves);
-            disp(whiteMoves);
-            
             %Check that a move is valid and if so tell the game a move was
             %made and tell the board a move was made.
             switch color
@@ -76,16 +73,13 @@ classdef game
                         obj.player.board=obj.player.board.setValue(color,position);
                     end
             end
-            disp(obj.madeWhiteMove);
-            disp(obj.madeColorMove);
         end
         
         %If the player hasn't made a move, see if said move is a valid move
         function obj = makeMove(obj,color,position)
             temp=obj.getCurrentTurn();
             if((~obj.madeWhiteMove||temp==obj.player.playerTurn)&&~obj.madeColorMove)
-                disp("Made move");
-                obj.pressed(color,position,temp==obj.player.playerTurn);
+                obj=obj.pressed(color,position,temp==obj.player.playerTurn);
             end
         end
         
