@@ -44,7 +44,7 @@ classdef game
             %made and tell the board a move was made.
             switch color
                 case "red"
-                    if(ismember(10+position,whiteMoves))
+                    if(ismember(10+position,whiteMoves)&&~obj.madeWhiteMove)
                         obj.madeWhiteMove=true;
                         obj.player.board=obj.player.board.setValue(color,position);
                     elseif(ismember(10+position,colorMoves))
@@ -52,7 +52,7 @@ classdef game
                         obj.player.board=obj.player.board.setValue(color,position);
                     end
                 case "yellow"
-                    if(ismember(10+position,whiteMoves))
+                    if(ismember(10+position,whiteMoves)&&~obj.madeWhiteMove)
                         obj.madeWhiteMove=true;
                         obj.player.board=obj.player.board.setValue(color,position);
                     elseif(ismember(20+position,colorMoves))
@@ -60,7 +60,7 @@ classdef game
                         obj.player.board=obj.player.board.setValue(color,position);
                     end
                 case "blue"
-                    if(ismember(10+position,whiteMoves))
+                    if(ismember(10+position,whiteMoves)&&~obj.madeWhiteMove)
                         obj.madeWhiteMove=true;
                         obj.player.board=obj.player.board.setValue(color,position);
                     elseif(ismember(30+position,colorMoves))
@@ -68,7 +68,7 @@ classdef game
                         obj.player.board=obj.player.board.setValue(color,position);
                     end
                 case "green"
-                    if(ismember(10+position,whiteMoves))
+                    if(ismember(10+position,whiteMoves)&&~obj.madeWhiteMove)
                         obj.madeWhiteMove=true;
                         obj.player.board=obj.player.board.setValue(color,position);
                     elseif(ismember(40+position,colorMoves))
@@ -76,6 +76,8 @@ classdef game
                         obj.player.board=obj.player.board.setValue(color,position);
                     end
             end
+            disp(obj.madeWhiteMove);
+            disp(obj.madeColorMove);
         end
         
         %If the player hasn't made a move, see if said move is a valid move
