@@ -7,10 +7,10 @@ classdef board
     end
     methods
         function obj = board()
-            obj.red = zeros(1,12);
-            obj.yellow = zeros(1,12);
-            obj.blue = zeros(1,12);
-            obj.green = zeros(1,12);
+            obj.red = zeros(1,11);
+            obj.yellow = zeros(1,11);
+            obj.blue = zeros(1,11);
+            obj.green = zeros(1,11);
         end
         function obj = setValue(obj,color,position)
             switch color
