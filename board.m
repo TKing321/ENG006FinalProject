@@ -4,6 +4,7 @@ classdef board
         yellow;
         blue;
         green;
+        playerPentalties
     end
     methods
         function obj = board()
@@ -11,6 +12,7 @@ classdef board
             obj.yellow = zeros(1,11);
             obj.blue = zeros(1,11);
             obj.green = zeros(1,11);
+            obj.playerPentalties = zeros(1,4);
         end
         function obj = setValue(obj,color,position)
             switch color
@@ -25,10 +27,10 @@ classdef board
                 otherwise
                     error("You have encounter an unexpected error, please contact the Author with the code 'Color Position'");
             end
-            obj
         end
     end
     methods
+        
         function value = total(obj,color)
             switch color
                 case "red"
@@ -42,6 +44,10 @@ classdef board
                 otherwise
                     error("You have encounter an unexpected error, please contact the Author with the code 'Color Value'");
             end
+        end
+        
+        function value = totalPentalties(obj)
+            value=sum(obj.playerPentalties);
         end
     end
 end

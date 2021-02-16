@@ -81,8 +81,6 @@ classdef game
                             else
                                 total=obj.board.total("yellow");
                                 if(total>=5)
-                                    obj.madeWhiteMove=true;
-                                    obj.player.board=obj.player.board.setValue(color,position);
                                     status(2)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                                 end
@@ -91,74 +89,45 @@ classdef game
                             if(position~=11)
                                 obj.madeColorMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
-                            else
-                                total=obj.board.total("yellow");
-                                if(total>=5)
-                                    obj.madeColorMove=true;
-                                    obj.player.board=obj.player.board.setValue(color,position);
-                                    status(2)=1;
-                                    thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
-                                end
+                            if(position==11)
+                                status(2)=1;
+                                thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                             end
                         end
                     end
                 case "blue"
                     if(~status(3))
                         if(ismember(10+position,whiteMoves)&&~obj.madeWhiteMove)
-                            if(position~=11)
-                                obj.madeWhiteMove=true;
-                                obj.player.board=obj.player.board.setValue(color,position);
-                            else
-                                total=obj.board.total("blue");
-                                if(total>=5)
-                                    obj.madeWhiteMove=true;
-                                    obj.player.board=obj.player.board.setValue(color,position);
-                                    status(3)=1;
-                                    thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
-                                end
+                            obj.madeWhiteMove=true;
+                            obj.player.board=obj.player.board.setValue(color,position);
+                            if(position==11)
+                                status(3)=1;
+                                thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                             end
                         elseif(ismember(30+position,colorMoves))
-                            if(position~=11)
-                                obj.madeColorMove=true;
-                                obj.player.board=obj.player.board.setValue(color,position);
-                            else
-                                total=obj.board.total("blue");
-                                if(total>=5)
-                                    obj.madeColorMove=true;
-                                    obj.player.board=obj.player.board.setValue(color,position);
-                                    status(3)=1;
-                                    thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
-                                end
+                            obj.madeColorMove=true;
+                            obj.player.board=obj.player.board.setValue(color,position);
+                            if(position==11)
+                                status(3)=1;
+                                thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                             end
                         end
                     end
                 case "green"
                     if(~status(4))
                         if(ismember(10+position,whiteMoves)&&~obj.madeWhiteMove)
-                            if(position~=11)
-                                obj.madeWhiteMove=true;
-                                obj.player.board=obj.player.board.setValue(color,position);
-                            else
-                                total=obj.board.total("green");
-                                if(total>=5)
-                                    obj.madeWhiteMove=true;
-                                    obj.player.board=obj.player.board.setValue(color,position);
-                                    status(4)=1;
-                                    thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
-                                end
+                            obj.madeWhiteMove=true;
+                            obj.player.board=obj.player.board.setValue(color,position);
+                            if(position==11)
+                                status(4)=1;
+                                thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                             end
                         elseif(ismember(40+position,colorMoves))
-                            if(position~=11)
-                                obj.madeColorMove=true;
-                                obj.player.board=obj.player.board.setValue(color,position);
-                            else
-                                total=obj.board.total("green");
-                                if(total>=5)
-                                    obj.madeColorMove=true;
-                                    obj.player.board=obj.player.board.setValue(color,position);
-                                    status(4)=1;
-                                    thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
-                                end
+                            obj.madeColorMove=true;
+                            obj.player.board=obj.player.board.setValue(color,position);
+                            if(position==11)
+                                status(4)=1;
+                                thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                             end
                         end
                     end
