@@ -12,7 +12,7 @@ classdef board
             obj.yellow = zeros(1,11);
             obj.blue = zeros(1,11);
             obj.green = zeros(1,11);
-            obj.playerPentalties = zeros(1,4);
+            obj.playerPentalties = 0;
         end
         function obj = setValue(obj,color,position)
             switch color
@@ -27,6 +27,9 @@ classdef board
                 otherwise
                     error("You have encounter an unexpected error, please contact the Author with the code 'Color Position'");
             end
+        end
+        function obj = incrementPenalties(obj)
+            obj.playerPenalties=obj.splayerPenatlies+1;
         end
     end
     methods

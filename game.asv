@@ -218,9 +218,8 @@ classdef game
                 if(~obj.madeColorMove||~obj.madeWhiteMove)
                     obj.player.board.incrementPenalties();
                 end
-                %Needs to be fully implemented.
-                newTurn=currentTurn(7)+1;
-                thingSpeakWrite(obj.channelIDTurn,[randi(6,1,6),newTurn,'WriteKey',obj.writeKeyTurn);
+                newTurn=currentT
+                thingSpeakWrite(obj.channelIDTurn,[randi(6,1,6),newTurn
             end
             obj.madeWhiteMove=false;
             obj.madeColorMove=false;
