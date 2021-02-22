@@ -1,12 +1,14 @@
 classdef player
     
     properties
+        %Each player has the player number and the board.
         playerTurn
         board
     end
     
     methods
         
+        %Constructor function does some fancy stuff.
         function obj = player(main)
             obj.board=board();
             temp=thingSpeakRead(main.channelIDStatus,'Readkey',main.readKeyStatus);
@@ -15,6 +17,7 @@ classdef player
             thingSpeakWrite(main.channelIDStatus,temp,'Writekey',main.writeKeyStatus);
         end
         
+        %Returns the total score of the player.
         function total = getPlayerScore(obj)
             temp=obj.board.total("red");
             for(i=1:1:temp)

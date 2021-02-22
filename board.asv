@@ -36,7 +36,7 @@ classdef board
             obj.playerPentalties=obj.playerPentalties+1;
         end
         
-        %Gets the the total value of a row.
+        %Gets the th
         function value = total(obj,color)
             switch color
                 case "red"
@@ -52,9 +52,8 @@ classdef board
             end
         end
         
-        %Gets the number of player penalties so far.
         function value = totalPentalties(obj)
-            value=obj.playerPentalties;
+            value=sum(obj.playerPentalties);
         end
     end
 end

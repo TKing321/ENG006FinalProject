@@ -2,6 +2,7 @@ classdef game
     
     properties (Constant)
         
+        %Channel writing numbers
         writeKeyTurn = 'NGW99VVOQPSVSISN';
         readKeyTurn = '5RYFWLGNF8I4GSQU';
         channelIDTurn = 1302152;
@@ -14,6 +15,8 @@ classdef game
     
     properties
         
+        %Each game has a player class that contains the board and player
+        %number. It also has the moves for the player that can happen.
         player;
         madeColorMove;
         madeWhiteMove;
@@ -30,27 +33,45 @@ classdef game
             obj.madeWhiteMove=false;
         end
         
-        %Function for if a key is pressed
+        %Function for when a specific key is pressed, takes the color press
+        %and the position of the pressed key as well as if its the
+        %player's turn.
         function obj = pressed(obj,color,position,playerTurn)
             
+            %Gets the valid moves for the positions and then shifts them
+            %because I'm too lazy to fix it, I think.
             [colorMoves,whiteMoves] = obj.getValidMoves(playerTurn);
             colorMoves=colorMoves-1;
             whiteMoves=whiteMoves-1;
             
+            %Gets the  current values of the status channel so that it can
+            %check if the rows are closed.
             status=thingSpeakRead(obj.channelIDStatus,'ReadKey',obj.readKeyStatus);
             
-            %Check that a move is valid and if so tell the game a move was
-            %made and tell the board a move was made.
+            %Code that checks if the move made is a valid move and then
+            %makes the move if it is.
             switch color
+                
+                %Explanation will only be written for one chunck
                 case "red"
+                    %Checks to see if the rest row is open
                     if(~status(1))
+                        %Checks if the move is a valid whitemove and a
+                        %white move hasn't been made.
                         if(ismember(10+position,whiteMoves)&&~obj.madeWhiteMove)
+                            %As long the position isn't the last one make
+                            %the move.
                             if(position~=11)
                                 obj.madeWhiteMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
                             else
+                                %If the move is the last one, check if
+                                %there is at least 5 numbers marked to
+                                %allow for the last one to be marked.
                                 total=obj.board.total("red");
                                 if(total>=5)
+                                    %If the last one in a row is marked,
+                                    %then close the row.
                                     obj.madeWhiteMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
                                     status(1)=1;
@@ -58,6 +79,8 @@ classdef game
                                 end
                             end
                         elseif(ismember(10+position,colorMoves))
+                            %Do the same thing as before but with the color
+                            %move instead. See above explanation
                             if(position~=11)
                                 obj.madeColorMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
@@ -167,6 +190,8 @@ classdef game
         
         %If the player hasn't made a move, see if said move is a valid move
         function obj = makeMove(obj,color,position)
+            %This improves processing time by stopping the computer from
+            %getting a move if the player can't make a move.
             temp=obj.getCurrentTurn();
             if((~obj.madeWhiteMove||temp==obj.player.playerTurn)&&~obj.madeColorMove)
                 obj=obj.pressed(color,position,temp==obj.player.playerTurn);
@@ -179,22 +204,30 @@ classdef game
             playerTurn=var(7);
         end
         
-        function dice = getDice(obj)
-            dice = obj.getCurrentValuesT();
-        end
-        
+        %Function that finds all of the valid moves.
         function [colorMoves,whiteMoves] = getValidMoves(obj,playerTurn)
             
             %Initialize necessary variables for calculations
             whiteMoves=[];
             colorMoves=[];
-            dice = obj.getDice();
+            dice = obj.getCurrentValuesT();
             total = dice(5)+dice(6);
-            maxValues=[max(obj.player.board.red),max(obj.player.board.yellow),max(obj.player.board.green),max(obj.player.board.blue)];
+            %The below code chunk need to be checked to make sure it works
+            %as intended. 
+            %This finds the last indice of the rows, you cant put a value
+            %to the left of said number.
+            maxValues=[find(obj.player.board.red,'last')+1,find(obj.player.board.yellow,'last')+1,find(obj.player.board.green,'last')+1,find(obj.player.board.blue,'last')+1];
             
-            %If its the player turn they have extra possible moves
+            %If its the player turn they have extra possible moves that the
+            %player can do.
             if(playerTurn)
-                colorValues=[[dice(1)+dice(5),dice(1)+dice(6)],[dice(2)+dice(5),dice(2)+dice(6)],[dice(3)+dice(5),dice(3)+dice(6)],[dice(4)+dice(5),dice(4)+dice(6)]];
+                
+                %This code needs to be checked that it functions as
+                %intened.
+                %This code goes through the possible dice combinations and
+                %checks to see if they are greater than the the last number
+                %marked in that row.
+                colorValues=[[dice(1)+dice(5),dice(1)+dice(6)],[dice(2)+dice(5),dice(2)+dice(6)],[-1*(dice(3)+dice(5))+14,-1*(dice(3)+dice(6))+14],[-1*(dice(4)+dice(5))+14,-1*(dice(4)+dice(6))+14]];
                 for(i=1:1:length(maxValues))
                     for(j=1:1:2)
                         if(maxValues(i)<colorValues(j+i*2-2))
@@ -212,17 +245,49 @@ classdef game
             end
         end
         
+        %This is the function for moving to the next turn
         function obj = newTurn(obj)
+            %Checks if it is currently the players turn
             currentTurn=getCurrentValuesT();
             if(obj.player.playerTurn==currentTurn(7))
+                %If its the players turn and they didn't make a move, add a
+                %penalty
                 if(~obj.madeColorMove||~obj.madeWhiteMove)
                     obj.player.board.incrementPenalties();
                 end
-                newTurn=currentT
-                thingSpeakWrite(obj.channelIDTurn,[randi(6,1,6),newTurn
+                currentPlayers=getCurrentValuesS();
+                %Tells the game whos turn it is next
+                if(obj.player.playerTurn==currentPlayers(6))
+                    newTurn=1;
+                else
+                    newTurn=currentTurn(7)+1;
+                end
+                %Checks if the end conditions of the game have been met
+                if(obj.player.board.totalPenalties==4||sum(currentPlayers(1:4)>=2))
+                    thingSpeakWrite(obj.channelIDStatus,[currentPlayers(1:4),0,currentPlayers(6)],'WriteKey',obj.writeKeyStatus);
+                end
+                %Writes the new dice numbers and turn to the thingspeak
+                %array
+                thingSpeakWrite(obj.channelIDTurn,[randi(6,1,6),newTurn],'WriteKey',obj.writeKeyTurn);
+            end
+            %Runs the general start turn function for all players
+            startTurn();
+        end
+        
+        function obj = startTurn(obj)
+            %Waits a bit to let code run to end g
+            pause(10);
+            temp=getCurrentValuesS();
+            if(temp(5)==0)
+                endGame();
+                return;
             end
             obj.madeWhiteMove=false;
             obj.madeColorMove=false;
+        end
+        
+        function obj = endGame(obj)
+            
         end
     end
     methods (Static)
@@ -230,6 +295,10 @@ classdef game
         %Get what players turn it currently is
         function currentValsTurns = getCurrentValuesT()
             currentValsTurns = thingSpeakRead(game.channelIDTurn,'Readkey',game.readKeyTurn);
+        end
+        
+        function currentValsStatus = getCurrentValuesS()
+            currentValsStatus = thingSpeakRead(game.channelIDStatus,'Readkey',game.readKeyStatus);
         end
         
     end
