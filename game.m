@@ -216,7 +216,7 @@ classdef game
             %as intended. 
             %This finds the last indice of the rows, you cant put a value
             %to the left of said number.
-            maxValues=[find(obj.player.board.red,'last')+1,find(obj.player.board.yellow,'last')+1,find(obj.player.board.green,'last')+1,find(obj.player.board.blue,'last')+1];
+            maxValues=[find(obj.player.board.red,1,'last')+1,find(obj.player.board.yellow,1,'last')+1,find(obj.player.board.green,1,'last')+1,find(obj.player.board.blue,1,'last')+1];
             
             %If its the player turn they have extra possible moves that the
             %player can do.
@@ -287,9 +287,9 @@ classdef game
             obj.madeWhiteMove=false;
             obj.madeColorMove=false;
         end
-        
         %Function that runs at the end of the game. Unknown what features
         %are wanted in it yet.
+        
         function obj = endGame(obj)
             
         end
