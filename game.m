@@ -36,7 +36,9 @@ classdef game
         %Function for when a specific key is pressed, takes the color press
         %and the position of the pressed key as well as if its the
         %player's turn.
-        function obj = pressed(obj,color,position,playerTurn)
+        function [obj,success] = pressed(obj,color,position,playerTurn)
+            
+            success=false;
             
             %Gets the valid moves for the positions and then shifts them
             %because I'm too lazy to fix it, I think.
@@ -64,6 +66,7 @@ classdef game
                             if(position~=11)
                                 obj.madeWhiteMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
+                                success=true;
                             else
                                 %If the move is the last one, check if
                                 %there is at least 5 numbers marked to
@@ -76,6 +79,7 @@ classdef game
                                     obj.player.board=obj.player.board.setValue(color,position);
                                     status(1)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
+                                    success=true;
                                 end
                             end
                         elseif(ismember(10+position,colorMoves))
@@ -84,6 +88,7 @@ classdef game
                             if(position~=11)
                                 obj.madeColorMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
+                                success=true;
                             else
                                 total=obj.board.total("red");
                                 if(total>=5)
@@ -91,6 +96,7 @@ classdef game
                                     obj.player.board=obj.player.board.setValue(color,position);
                                     status(1)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
+                                    success=true;
                                 end
                             end
                         end
@@ -98,9 +104,10 @@ classdef game
                 case "yellow"
                     if(~status(2))
                         if(ismember(10+position,whiteMoves)&&~obj.madeWhiteMove)
-                            if(postion~=11)
+                            if(position~=11)
                                 obj.madeWhiteMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
+                                success=true;
                             else
                                 total=obj.board.total("yellow");
                                 if(total>=5)
@@ -108,12 +115,14 @@ classdef game
                                     obj.player.board=obj.player.board.setValue(color,position);
                                     status(2)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
+                                    success=true;
                                 end
                             end
                         elseif(ismember(20+position,colorMoves))
                             if(position~=11)
                                 obj.madeColorMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
+                                success=true;
                             else
                                 total=obj.board.total("yellow");
                                 if(total>=5)
@@ -121,6 +130,7 @@ classdef game
                                     obj.player.board=obj.player.board.setValue(color,position);
                                     status(2)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
+                                    success=true;
                                 end
                             end
                         end
@@ -131,6 +141,7 @@ classdef game
                             if(position~=11)
                                 obj.madeWhiteMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
+                                success=true;
                             else
                                 total=obj.board.total("blue");
                                 if(total>=5)
@@ -138,12 +149,14 @@ classdef game
                                     obj.player.board=obj.player.board.setValue(color,position);
                                     status(3)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
+                                    success=true;
                                 end
                             end
                         elseif(ismember(30+position,colorMoves))
                             if(position~=11)
                                 obj.madeColorMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
+                                success=true;
                             else
                                 total=obj.board.total("blue");
                                 if(total>=5)
@@ -151,6 +164,7 @@ classdef game
                                     obj.player.board=obj.player.board.setValue(color,position);
                                     status(3)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
+                                    success=true;
                                 end
                             end
                         end
@@ -161,6 +175,7 @@ classdef game
                             if(position~=11)
                                 obj.madeWhiteMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
+                                success=true;
                             else
                                 total=obj.board.total("green");
                                 if(total>=5)
@@ -168,12 +183,14 @@ classdef game
                                     obj.player.board=obj.player.board.setValue(color,position);
                                     status(4)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
+                                    success=true;
                                 end
                             end
                         elseif(ismember(40+position,colorMoves))
                             if(position~=11)
                                 obj.madeColorMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
+                                success=true;
                             else
                                 total=obj.board.total("green");
                                 if(total>=5)
@@ -181,6 +198,7 @@ classdef game
                                     obj.player.board=obj.player.board.setValue(color,position);
                                     status(4)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
+                                    success=true;
                                 end
                             end
                         end
@@ -189,12 +207,13 @@ classdef game
         end
         
         %If the player hasn't made a move, see if said move is a valid move
-        function obj = makeMove(obj,color,position)
+        function [obj,success] = makeMove(obj,color,position)
             %This improves processing time by stopping the computer from
             %getting a move if the player can't make a move.
             temp=obj.getCurrentTurn();
+            success=false;
             if((~obj.madeWhiteMove||temp==obj.player.playerTurn)&&~obj.madeColorMove)
-                obj=obj.pressed(color,position,temp==obj.player.playerTurn);
+                [obj,success]=obj.pressed(color,position,temp==obj.player.playerTurn);
             end
         end
         
@@ -216,7 +235,7 @@ classdef game
             %as intended. 
             %This finds the last indice of the rows, you cant put a value
             %to the left of said number.
-            maxValues=[find(obj.player.board.red,1,'last')+1,find(obj.player.board.yellow,1,'last')+1,find(obj.player.board.green,1,'last')+1,find(obj.player.board.blue,1,'last')+1];
+            maxValues=[obj.findMaxValue("red"),obj.findMaxValue("yellow"),obj.findMaxValue("green"),obj.findMaxValue("blue")];
             
             %If its the player turn they have extra possible moves that the
             %player can do.
@@ -242,6 +261,23 @@ classdef game
                 if(total>maxValues(i))
                     whiteMoves=[whiteMoves,i*10+total];
                 end
+            end
+        end
+        
+        function maxValue = findMaxValue(obj,color)
+            if(obj.player.board.total(color)~=0)
+                switch color
+                    case "red"
+                        maxValue=find(obj.player.board.red,1,'last')+1;
+                    case "yellow"
+                        maxValue=find(obj.player.board.yellow,1,'last')+1;
+                    case "blue"
+                        maxValue=find(obj.player.board.blue,1,'last')+1;
+                    case "green"
+                        maxValue=find(obj.player.board.green,1,'last')+1;
+                end
+            else
+                maxValue=1;
             end
         end
         
