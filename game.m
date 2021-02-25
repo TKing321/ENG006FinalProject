@@ -60,7 +60,7 @@ classdef game
                     if(~status(1))
                         %Checks if the move is a valid whitemove and a
                         %white move hasn't been made.
-                        if(ismember(10+position,whiteMoves)&&~obj.madeWhiteMove)
+                        if(ismember(20+position,whiteMoves)&&~obj.madeWhiteMove)
                             %As long the position isn't the last one make
                             %the move.
                             if(position~=11)
@@ -71,7 +71,7 @@ classdef game
                                 %If the move is the last one, check if
                                 %there is at least 5 numbers marked to
                                 %allow for the last one to be marked.
-                                total=obj.board.total("red");
+                                total=obj.player.board.total("red");
                                 if(total>=5)
                                     %If the last one in a row is marked,
                                     %then close the row.
@@ -82,7 +82,7 @@ classdef game
                                     success=true;
                                 end
                             end
-                        elseif(ismember(10+position,colorMoves))
+                        elseif(ismember(20+position,colorMoves))
                             %Do the same thing as before but with the color
                             %move instead. See above explanation
                             if(position~=11)
@@ -90,7 +90,7 @@ classdef game
                                 obj.player.board=obj.player.board.setValue(color,position);
                                 success=true;
                             else
-                                total=obj.board.total("red");
+                                total=obj.player.board.total("red");
                                 if(total>=5)
                                     obj.madeColorMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
@@ -103,13 +103,13 @@ classdef game
                     end
                 case "yellow"
                     if(~status(2))
-                        if(ismember(10+position,whiteMoves)&&~obj.madeWhiteMove)
+                        if(ismember(40+position,whiteMoves)&&~obj.madeWhiteMove)
                             if(position~=11)
                                 obj.madeWhiteMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
                                 success=true;
                             else
-                                total=obj.board.total("yellow");
+                                total=obj.player.board.total("yellow");
                                 if(total>=5)
                                     obj.madeWhiteMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
@@ -118,13 +118,13 @@ classdef game
                                     success=true;
                                 end
                             end
-                        elseif(ismember(20+position,colorMoves))
+                        elseif(ismember(40+position,colorMoves))
                             if(position~=11)
                                 obj.madeColorMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
                                 success=true;
                             else
-                                total=obj.board.total("yellow");
+                                total=obj.player.board.total("yellow");
                                 if(total>=5)
                                     obj.madeColorMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
@@ -137,13 +137,13 @@ classdef game
                     end
                 case "blue"
                     if(~status(3))
-                        if(ismember(10+position,whiteMoves)&&~obj.madeWhiteMove)
+                        if(ismember(60+position,whiteMoves)&&~obj.madeWhiteMove)
                             if(position~=11)
                                 obj.madeWhiteMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
                                 success=true;
                             else
-                                total=obj.board.total("blue");
+                                total=obj.player.board.total("blue");
                                 if(total>=5)
                                     obj.madeWhiteMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
@@ -152,13 +152,13 @@ classdef game
                                     success=true;
                                 end
                             end
-                        elseif(ismember(30+position,colorMoves))
+                        elseif(ismember(60+position,colorMoves))
                             if(position~=11)
                                 obj.madeColorMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
                                 success=true;
                             else
-                                total=obj.board.total("blue");
+                                total=obj.player.board.total("blue");
                                 if(total>=5)
                                     obj.madeColorMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
@@ -171,13 +171,13 @@ classdef game
                     end
                 case "green"
                     if(~status(4))
-                        if(ismember(10+position,whiteMoves)&&~obj.madeWhiteMove)
+                        if(ismember(80+position,whiteMoves)&&~obj.madeWhiteMove)
                             if(position~=11)
                                 obj.madeWhiteMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
                                 success=true;
                             else
-                                total=obj.board.total("green");
+                                total=obj.player.board.total("green");
                                 if(total>=5)
                                     obj.madeWhiteMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
@@ -186,13 +186,13 @@ classdef game
                                     success=true;
                                 end
                             end
-                        elseif(ismember(40+position,colorMoves))
+                        elseif(ismember(80+position,colorMoves))
                             if(position~=11)
                                 obj.madeColorMove=true;
                                 obj.player.board=obj.player.board.setValue(color,position);
                                 success=true;
                             else
-                                total=obj.board.total("green");
+                                total=obj.player.board.total("green");
                                 if(total>=5)
                                     obj.madeColorMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
@@ -235,7 +235,7 @@ classdef game
             %as intended. 
             %This finds the last indice of the rows, you cant put a value
             %to the left of said number.
-            maxValues=[obj.findMaxValue("red"),obj.findMaxValue("yellow"),obj.findMaxValue("green"),obj.findMaxValue("blue")];
+            maxValues=[obj.findMaxValue("red"),obj.findMaxValue("yellow"),14-obj.findMaxValue("green"),14-obj.findMaxValue("blue")];
             
             %If its the player turn they have extra possible moves that the
             %player can do.
@@ -250,16 +250,25 @@ classdef game
                 for(i=1:1:length(maxValues))
                     for(j=1:1:2)
                         if(maxValues(i)<colorValues(j+i*2-2))
-                            colorMoves=[colorMoves,i*10+colorValues(j+i*2-2)];
+                            colorMoves=[colorMoves,i*20+colorValues(j+i*2-2)];
                         end
                     end
                 end
             end
             
             %Generalized move list for all players
+            %Implemented what I think will work, not perfectly sure
             for (i=1:1:length(maxValues))
-                if(total>maxValues(i))
-                    whiteMoves=[whiteMoves,i*10+total];
+                %If the color is Blue or Green
+                if(i>2)
+                    %Check if the value is less than the max
+                    if(total<maxValues(i))
+                        whiteMoves=[whiteMoves,i*20+14-total];
+                    end
+                else
+                    if(total>maxValues(i))
+                        whiteMoves=[whiteMoves,i*20+total];
+                    end
                 end
             end
         end
