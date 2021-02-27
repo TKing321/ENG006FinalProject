@@ -5,16 +5,16 @@ classdef board
         yellow;
         blue;
         green;
-        playerPentalties
+        playerPenalties
     end
     methods
         %Initializes the board.
         function obj = board()
-            obj.red = zeros(1,11);
-            obj.yellow = zeros(1,11);
-            obj.blue = zeros(1,11);
-            obj.green = zeros(1,11);
-            obj.playerPentalties = 0;
+            obj.red = zeros(1,12);
+            obj.yellow = zeros(1,12);
+            obj.blue = zeros(1,12);
+            obj.green = zeros(1,12);
+            obj.playerPenalties = 0;
         end
         %Sets the value of a certain color and position.
         function obj = setValue(obj,color,position)
@@ -33,7 +33,7 @@ classdef board
         end
         %Adds another penalty to the player
         function obj = incrementPenalties(obj)
-            obj.playerPentalties=obj.playerPentalties+1;
+            obj.playerPenalties=obj.playerPenalties+1;
         end
         
         %Gets the the total value of a row.
@@ -53,8 +53,8 @@ classdef board
         end
         
         %Gets the number of player penalties so far.
-        function value = totalPentalties(obj)
-            value=obj.playerPentalties;
+        function value = totalPenalties(obj)
+            value=obj.playerPenalties;
         end
     end
 end

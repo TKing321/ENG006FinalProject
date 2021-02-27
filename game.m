@@ -77,6 +77,7 @@ classdef game
                                     %then close the row.
                                     obj.madeWhiteMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
+                                    obj.player.board=obj.player.board.setValue(color,position+1);
                                     status(1)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                                     success=true;
@@ -94,6 +95,7 @@ classdef game
                                 if(total>=5)
                                     obj.madeColorMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
+                                    obj.player.board=obj.player.board.setValue(color,position+1);
                                     status(1)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                                     success=true;
@@ -113,6 +115,7 @@ classdef game
                                 if(total>=5)
                                     obj.madeWhiteMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
+                                    obj.player.board=obj.player.board.setValue(color,position+1);
                                     status(2)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                                     success=true;
@@ -128,6 +131,7 @@ classdef game
                                 if(total>=5)
                                     obj.madeColorMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
+                                    obj.player.board=obj.player.board.setValue(color,position+1);
                                     status(2)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                                     success=true;
@@ -135,7 +139,7 @@ classdef game
                             end
                         end
                     end
-                case "blue"
+                case "green"
                     if(~status(3))
                         if(ismember(60+position,whiteMoves)&&~obj.madeWhiteMove)
                             if(position~=11)
@@ -143,10 +147,11 @@ classdef game
                                 obj.player.board=obj.player.board.setValue(color,position);
                                 success=true;
                             else
-                                total=obj.player.board.total("blue");
+                                total=obj.player.board.total("green");
                                 if(total>=5)
                                     obj.madeWhiteMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
+                                    obj.player.board=obj.player.board.setValue(color,position+1);
                                     status(3)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                                     success=true;
@@ -158,10 +163,11 @@ classdef game
                                 obj.player.board=obj.player.board.setValue(color,position);
                                 success=true;
                             else
-                                total=obj.player.board.total("blue");
+                                total=obj.player.board.total("green");
                                 if(total>=5)
                                     obj.madeColorMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
+                                    obj.player.board=obj.player.board.setValue(color,position+1);
                                     status(3)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                                     success=true;
@@ -169,7 +175,7 @@ classdef game
                             end
                         end
                     end
-                case "green"
+                case "blue"
                     if(~status(4))
                         if(ismember(80+position,whiteMoves)&&~obj.madeWhiteMove)
                             if(position~=11)
@@ -177,10 +183,11 @@ classdef game
                                 obj.player.board=obj.player.board.setValue(color,position);
                                 success=true;
                             else
-                                total=obj.player.board.total("green");
+                                total=obj.player.board.total("blue");
                                 if(total>=5)
                                     obj.madeWhiteMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
+                                    obj.player.board=obj.player.board.setValue(color,position+1);
                                     status(4)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                                     success=true;
@@ -192,10 +199,11 @@ classdef game
                                 obj.player.board=obj.player.board.setValue(color,position);
                                 success=true;
                             else
-                                total=obj.player.board.total("green");
+                                total=obj.player.board.total("blue");
                                 if(total>=5)
                                     obj.madeColorMove=true;
                                     obj.player.board=obj.player.board.setValue(color,position);
+                                    obj.player.board=obj.player.board.setValue(color,position+1);
                                     status(4)=1;
                                     thingSpeakWrite(obj.channelIDStatus,status,'WriteKey',obj.writeKeyStatus);
                                     success=true;
@@ -246,11 +254,18 @@ classdef game
                 %This code goes through the possible dice combinations and
                 %checks to see if they are greater than the the last number
                 %marked in that row.
-                colorValues=[[dice(1)+dice(5),dice(1)+dice(6)],[dice(2)+dice(5),dice(2)+dice(6)],[-1*(dice(3)+dice(5))+14,-1*(dice(3)+dice(6))+14],[-1*(dice(4)+dice(5))+14,-1*(dice(4)+dice(6))+14]];
-                for(i=1:1:length(maxValues))
+                colorValues=[[dice(1)+dice(5),dice(1)+dice(6)],[dice(2)+dice(5),dice(2)+dice(6)],[(dice(3)+dice(5)),(dice(3)+dice(6))],[(dice(4)+dice(5)),(dice(4)+dice(6))]];
+                for(i=1:1:2)
                     for(j=1:1:2)
                         if(maxValues(i)<colorValues(j+i*2-2))
                             colorMoves=[colorMoves,i*20+colorValues(j+i*2-2)];
+                        end
+                    end
+                end
+                for(i=3:1:4)
+                    for(j=1:1:2)
+                        if(maxValues(i)>colorValues(j+i*2-2))
+                            colorMoves=[colorMoves,i*20+14-colorValues(j+i*2-2)];
                         end
                     end
                 end
@@ -293,14 +308,14 @@ classdef game
         %This is the function for moving to the next turn
         function obj = newTurn(obj)
             %Checks if it is currently the players turn
-            currentTurn=getCurrentValuesT();
+            currentTurn=obj.getCurrentValuesT();
             if(obj.player.playerTurn==currentTurn(7))
                 %If its the players turn and they didn't make a move, add a
                 %penalty
-                if(~obj.madeColorMove||~obj.madeWhiteMove)
-                    obj.player.board.incrementPenalties();
+                if(~obj.madeColorMove&&~obj.madeWhiteMove)
+                    obj.player.board=obj.player.board.incrementPenalties();
                 end
-                currentPlayers=getCurrentValuesS();
+                currentPlayers=obj.getCurrentValuesS();
                 %Tells the game whos turn it is next
                 if(obj.player.playerTurn==currentPlayers(6))
                     newTurn=1;
@@ -316,16 +331,17 @@ classdef game
                 thingSpeakWrite(obj.channelIDTurn,[randi(6,1,6),newTurn],'WriteKey',obj.writeKeyTurn);
             end
             %Runs the general start turn function for all players
-            startTurn();
+            obj=obj.startTurn();
         end
         
         function obj = startTurn(obj)
             %Waits a bit to let code run to end game
-            pause(10);
-            temp=getCurrentValuesS();
+            pause(5);
+            temp=obj.getCurrentValuesS();
             %If the game is over, run the function to end the game.
             if(temp(5)==0)
-                endGame();
+                obj.madeWhiteMove=true;
+                obj.madeColorMove=true;
                 return;
             end
             %Sets the moves amde to be false for a new turn.
