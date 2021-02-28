@@ -310,12 +310,16 @@ classdef game
             %Checks if it is currently the players turn
             currentTurn=obj.getCurrentValuesT();
             if(obj.player.playerTurn==currentTurn(7))
+                
+                currentPlayers=obj.getCurrentValuesS();
+                thingSpeakWrite(obj.channelIDStatus,[currentPlayers(1:6),1],'WriteKey',obj.writeKeyStatus);
+                pause(1);
+                
                 %If its the players turn and they didn't make a move, add a
                 %penalty
                 if(~obj.madeColorMove&&~obj.madeWhiteMove)
                     obj.player.board=obj.player.board.incrementPenalties();
                 end
-                currentPlayers=obj.getCurrentValuesS();
                 %Tells the game whos turn it is next
                 if(obj.player.playerTurn==currentPlayers(6))
                     newTurn=1;
@@ -324,19 +328,27 @@ classdef game
                 end
                 %Checks if the end conditions of the game have been met
                 if(obj.player.board.totalPenalties==4||sum(currentPlayers(1:4))>=2)
-                    thingSpeakWrite(obj.channelIDStatus,[currentPlayers(1:4),0,currentPlayers(6)],'WriteKey',obj.writeKeyStatus);
+                    thingSpeakWrite(obj.channelIDStatus,[currentPlayers(1:4),0,currentPlayers(6:7)],'WriteKey',obj.writeKeyStatus);
+                    pause(1);
                 end
                 %Writes the new dice numbers and turn to the thingspeak
                 %array
                 thingSpeakWrite(obj.channelIDTurn,[randi(6,1,6),newTurn],'WriteKey',obj.writeKeyTurn);
             end
             %Runs the general start turn function for all players
-            obj=obj.startTurn();
+            obj=obj.startTurn(obj.player.playerTurn==currentTurn(7));
         end
         
-        function obj = startTurn(obj)
+        function obj = startTurn(obj,playerTurn)
             %Waits a bit to let code run to end game
             pause(1);
+            temp=obj.getCurrentValuesS();
+            if(playerTurn)
+                thingSpeakWrite(obj.channelIDStatus,[temp(1:6),0],'WriteKey',obj.writeKeyStatus);
+            end
+            while(temp(7)==1)
+                temp=obj.getCurrentValuesS();
+            end
             temp=obj.getCurrentValuesS();
             %If the game is over, run the function to end the game.
             if(temp(5)==0)
