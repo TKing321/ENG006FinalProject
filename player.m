@@ -19,6 +19,7 @@ classdef player
         
         %Returns the total score of the player.
         function total = getPlayerScore(obj)
+            total=0;
             temp=obj.board.total("red");
             for(i=1:1:temp)
                 total=total+i;
