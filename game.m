@@ -323,7 +323,7 @@ classdef game
                     newTurn=currentTurn(7)+1;
                 end
                 %Checks if the end conditions of the game have been met
-                if(obj.player.board.totalPenalties==4||sum(currentPlayers(1:4)>=2))
+                if(obj.player.board.totalPenalties==4||sum(currentPlayers(1:4))>=2)
                     thingSpeakWrite(obj.channelIDStatus,[currentPlayers(1:4),0,currentPlayers(6)],'WriteKey',obj.writeKeyStatus);
                 end
                 %Writes the new dice numbers and turn to the thingspeak
@@ -336,7 +336,7 @@ classdef game
         
         function obj = startTurn(obj)
             %Waits a bit to let code run to end game
-            pause(5);
+            pause(1);
             temp=obj.getCurrentValuesS();
             %If the game is over, run the function to end the game.
             if(temp(5)==0)
