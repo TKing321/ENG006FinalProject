@@ -364,7 +364,9 @@ classdef game
         %are wanted in it yet.
         
         function obj = endGame(obj)
-            
+            pause(1);
+            thingSpeakWrite(obj.channelIDStatus,[0,0,0,0,0,0,0],'WriteKey',obj.writeKeyStatus);
+            pause(1);
         end
     end
     methods (Static)
