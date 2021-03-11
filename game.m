@@ -23,6 +23,8 @@ classdef game
         
     end
     
+    
+    
     methods
         
         %Constructor for the game class. Each game has a player and if the
@@ -31,6 +33,8 @@ classdef game
             obj.player=player(obj);
             obj.madeColorMove=false;
             obj.madeWhiteMove=false;
+            [y, Fs] = audioread("8bit.mp3");
+            sound(y, Fs);
         end
         
         %Function for when a specific key is pressed, takes the color press
@@ -214,6 +218,7 @@ classdef game
             end
         end
         
+        
         %If the player hasn't made a move, see if said move is a valid move
         function [obj,success] = makeMove(obj,color,position)
             %This improves processing time by stopping the computer from
@@ -367,6 +372,8 @@ classdef game
             pause(1);
             thingSpeakWrite(obj.channelIDStatus,[0,0,0,0,0,0,0],'WriteKey',obj.writeKeyStatus);
             pause(1);
+            %clears sound once game has ended
+            clear sound
         end
     end
     methods (Static)
