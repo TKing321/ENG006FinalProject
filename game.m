@@ -21,6 +21,8 @@ classdef game
         madeColorMove;
         madeWhiteMove;
         
+        aPlayer
+        
     end
     
     
@@ -34,7 +36,9 @@ classdef game
             obj.madeColorMove=false;
             obj.madeWhiteMove=false;
             [y, Fs] = audioread("8bit.mp3");
-            sound(y, Fs);
+            obj.aPlayer = audioplayer(y,Fs);
+            obj.aPlayer.StopFcn= @(src, event) play(src);
+            play(obj.aPlayer);
         end
         
         %Function for when a specific key is pressed, takes the color press
@@ -373,7 +377,7 @@ classdef game
             thingSpeakWrite(obj.channelIDStatus,[0,0,0,0,0,0,0],'WriteKey',obj.writeKeyStatus);
             pause(1);
             %clears sound once game has ended
-            clear sound
+            stop(obj.aPlayer);
         end
     end
     methods (Static)
