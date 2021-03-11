@@ -21,7 +21,7 @@ classdef game
         madeColorMove;
         madeWhiteMove;
         
-        aPlayer
+        aPlayer;
         
     end
     
