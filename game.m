@@ -36,7 +36,7 @@ classdef game
             obj.madeColorMove=false;
             obj.madeWhiteMove=false;
             [y, Fs] = audioread("8bit.mp3");
-            obj.aPlayer = audioplayer(y,Fs);
+            obj.aPlayer = audioplayer(y/3,Fs);
             obj.aPlayer.StopFcn= @(src, event) play(src);
             play(obj.aPlayer);
         end
