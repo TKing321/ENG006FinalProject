@@ -377,7 +377,7 @@ classdef game
             thingSpeakWrite(obj.channelIDStatus,[0,0,0,0,0,0,0],'WriteKey',obj.writeKeyStatus);
             pause(1);
             %clears sound once game has ended
-            stop(obj.aPlayer);
+            delete(obj.aPlayer);
         end
     end
     methods (Static)
